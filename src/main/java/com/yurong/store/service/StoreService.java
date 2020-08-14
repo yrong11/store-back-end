@@ -31,4 +31,22 @@ public class StoreService {
                         .unit(item.getUnit()).picURL(item.getPicURL()).build()).collect(Collectors.toList());
 
     }
+
+    public void addProduct(Product product){
+        ProductDto productDto = proToDto(product);
+        productRepository.save(productDto);
+    }
+
+
+    public Product dtoToPro(ProductDto productDto){
+        return Product.builder().price(productDto.getPrice())
+                .name(productDto.getName())
+                .picURL(productDto.getPicURL())
+                .unit(productDto.getUnit()).build();
+    }
+
+    public ProductDto proToDto(Product product){
+        return ProductDto.builder().name(product.getName()).price(product.getPrice())
+                .unit(product.getUnit()).picURL(product.getPicURL()).build();
+    }
 }

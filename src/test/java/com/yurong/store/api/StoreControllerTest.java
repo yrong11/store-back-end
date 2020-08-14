@@ -1,5 +1,6 @@
 package com.yurong.store.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yurong.store.domain.Product;
 import com.yurong.store.dto.ProductDto;
 import com.yurong.store.repository.ProductRepository;
@@ -8,7 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.is;
@@ -54,6 +58,27 @@ class StoreControllerTest {
         mockMvc.perform(get("/store").param("page", "1").param("size","1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(1)));
+    }
+
+    @Test
+    public void add_product() throws Exception {
+        product.setName("雪碧");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(product);
+        mockMvc.perform(post("/product").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        List<ProductDto> productDtos = productRepository.findAll();
+        assertEquals( 2 ,productDtos.size());
+
+    }
+
+    @Test
+    public void should_bad_request_when_product_invalid() throws Exception {
+        product.setName(null);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(product);
+        mockMvc.perform(post("/product").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
 }
