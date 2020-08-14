@@ -16,4 +16,5 @@ public interface ProductRepository extends PagingAndSortingRepository<ProductDto
 
     @Override
     Page<ProductDto> findAll(Pageable pageable);
+
 }

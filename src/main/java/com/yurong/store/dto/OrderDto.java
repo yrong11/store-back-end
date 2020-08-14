@@ -12,14 +12,14 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product")
-public class ProductDto {
+@Table(name = "product_order")
+public class OrderDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
-    private float price;
-    private String unit;
-    private String picURL;
-
+    private int number;
+    private int proId;
+    private String proName;
+    private float proPrice;
+    private String proUnit;
 }
