@@ -39,8 +39,8 @@ class OrderControllerTest {
 
     @BeforeEach
     void setup(){
-//        orderRepository.deleteAll();
-//        productRepository.deleteAll();
+        orderRepository.deleteAll();
+        productRepository.deleteAll();
         product = Product.builder().name("可乐").unit("瓶").picURL("xxx").price(2.5f).build();
         addProductData();
     }
@@ -50,6 +50,17 @@ class OrderControllerTest {
                 .picURL(product.getPicURL()).price(product.getPrice()).unit(product.getUnit()).build();
         productRepository.save(productDto);
         return productDto.getId();
+    }
+
+    public int addOrder() {
+        OrderDto orderDto = OrderDto.builder().proId(productDto.getId())
+                .proUnit(productDto.getUnit())
+                .proPrice(productDto.getPrice())
+                .proName(productDto.getName())
+                .number(2)
+                .build();
+        orderRepository.save(orderDto);
+        return orderDto.getId();
     }
 
     @Test
@@ -67,6 +78,16 @@ class OrderControllerTest {
                 .andExpect(status().isOk());
         List<OrderDto> orderDtos = orderRepository.findAll();
         assertEquals( 1 ,orderDtos.size());
+
+    }
+
+    @Test
+    public void get_order_list() throws Exception {
+        addOrder();
+        addOrder();
+        mockMvc.perform(get("/orders"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(2)));
 
     }
 

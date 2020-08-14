@@ -1,13 +1,18 @@
 package com.yurong.store.service;
 
 import com.yurong.store.domain.Order;
+import com.yurong.store.domain.Product;
 import com.yurong.store.dto.OrderDto;
 import com.yurong.store.dto.ProductDto;
 import com.yurong.store.repository.OrderRepository;
 import com.yurong.store.repository.ProductRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -28,6 +33,19 @@ public class OrderService {
         }
 
         return false;
+    }
+
+    public List<Order> getOrderList(Integer page, Integer size) {
+        List<OrderDto> orderDtos;
+        if (page != null && size != null && page > 0 && size > 0){
+            Pageable pageable = PageRequest.of(page - 1, size);
+            orderDtos = orderRepository.findAll(pageable).getContent();
+        }else
+            orderDtos = orderRepository.findAll();
+
+        return orderDtos.stream().map(
+                item -> dtoToOrder(item)).collect(Collectors.toList());
+
     }
 
     public Order dtoToOrder(OrderDto orderDto){
