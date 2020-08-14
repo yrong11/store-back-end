@@ -48,6 +48,10 @@ public class OrderService {
 
     }
 
+    public void deleteOrder(int orderId){
+        orderRepository.deleteById(orderId);
+    }
+
     public Order dtoToOrder(OrderDto orderDto){
         return Order.builder()
                 .number(orderDto.getNumber())

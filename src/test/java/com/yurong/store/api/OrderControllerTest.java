@@ -91,4 +91,15 @@ class OrderControllerTest {
 
     }
 
+    @Test
+    public void delete_order() throws Exception {
+        addOrder();
+        int id = addOrder();
+        mockMvc.perform(delete("/order/"+id))
+                .andExpect(status().isOk());
+        List<OrderDto> orderDtos = orderRepository.findAll();
+        assertEquals( 1 ,orderDtos.size());
+
+    }
+
 }
