@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class Order {
+    private int id;
     private int proId;
     private int number;
     private String proName;

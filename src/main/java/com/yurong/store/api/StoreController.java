@@ -16,19 +16,18 @@ public class StoreController {
     @Autowired
     StoreService storeService;
 
+    @CrossOrigin
     @GetMapping("/store")
     public ResponseEntity getProductList(@RequestParam(required = false) Integer page,
                                          @RequestParam(required = false) Integer size){
         return ResponseEntity.ok(storeService.getProductList(page, size));
     }
 
+    @CrossOrigin
     @PostMapping("/product")
     public ResponseEntity addProduct(@RequestBody @Valid Product product){
         storeService.addProduct(product);
         return ResponseEntity.ok().build();
     }
-
-
-
-
+    
 }

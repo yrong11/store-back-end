@@ -19,18 +19,21 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+    @CrossOrigin
     @PostMapping("/order")
     public ResponseEntity addOrder(@RequestBody @Valid Order order){
         boolean flag = orderService.addOrder(order);
         return flag ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
+    @CrossOrigin
     @GetMapping("/orders")
     public ResponseEntity getOrderList(@RequestParam(required = false) Integer page,
                                          @RequestParam(required = false) Integer size){
         return ResponseEntity.ok(orderService.getOrderList(page, size));
     }
 
+    @CrossOrigin
     @DeleteMapping("/order/{orderId}")
     public ResponseEntity deleteOrder(@PathVariable int orderId){
         orderService.deleteOrder(orderId);

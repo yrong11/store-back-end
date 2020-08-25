@@ -26,9 +26,16 @@ public class OrderService {
 
     public boolean addOrder(Order order){
         Integer proId = new Integer(order.getProId());
+        OrderDto orderDto;
         if(productRepository.findById(proId).isPresent()){
-            OrderDto orderDto = orderToDto(order);
+            if (orderRepository.existsByProId(order.getProId())){
+                orderDto = orderRepository.findByProId(order.getProId());
+                orderDto.setNumber(orderDto.getNumber() + 1);
+            }else{
+                orderDto = orderToDto(order);
+            }
             orderRepository.save(orderDto);
+
             return true;
         }
 
@@ -54,6 +61,7 @@ public class OrderService {
 
     public Order dtoToOrder(OrderDto orderDto){
         return Order.builder()
+                .id(orderDto.getId())
                 .number(orderDto.getNumber())
                 .proId(orderDto.getProId())
                 .proName(orderDto.getProName())

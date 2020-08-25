@@ -27,7 +27,7 @@ public class StoreService {
             products = productRepository.findAll();
 
         return products.stream().map(
-                item -> Product.builder().name(item.getName()).price(item.getPrice())
+                item -> Product.builder().id(item.getId()).name(item.getName()).price(item.getPrice())
                         .unit(item.getUnit()).picURL(item.getPicURL()).build()).collect(Collectors.toList());
 
     }
@@ -39,7 +39,8 @@ public class StoreService {
 
 
     public Product dtoToPro(ProductDto productDto){
-        return Product.builder().price(productDto.getPrice())
+        return Product.builder().id((productDto.getId()))
+                .price(productDto.getPrice())
                 .name(productDto.getName())
                 .picURL(productDto.getPicURL())
                 .unit(productDto.getUnit()).build();
